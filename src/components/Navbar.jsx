@@ -8,7 +8,7 @@ function Navbar() {
   return (
     <nav className="bg-zinc-700 flex flex-col gap-y-3 sm:flex-row items-center justify-between my-3 px-10 py-3 rounded-lg">
       <Link to={isAuthenticated ? '/tasks' : '/'}>
-        <h1 className="text-2xl font-bold z-50">Tasks Manager</h1>
+        <button className="text-2xl font-bold z-50 bg-zinc-700">Tasks Manager</button>
       </Link>
       <ul className="flex flex-row justify-center items-center gap-2">
         {isAuthenticated ? (
