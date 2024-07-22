@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
 import { signupRequest, loginRequest, verifyTokenRequest } from '../api/auth.js';
 import Cookies from 'js-cookie';

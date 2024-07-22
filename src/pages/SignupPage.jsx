@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../context/AuthContext';
 import { useEffect } from 'react';
@@ -12,7 +11,7 @@ function SignupPage() {
   // Si el usuario está autenticado, lo redirigimos a la página de tareas
   useEffect(() => {
     if (isAuthenticated) navigate('/tasks', { state: { fromSignup: true } });
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
 
   const onSubmit = handleSubmit((values) => {
     signup(values);
