@@ -22,6 +22,49 @@ export const AuthProvider = ({ children }) => {
   const [errors, setErrors] = useState([]); // errores de validación
   const [loading, setLoading] = useState(true);
 
+  // Cada vez que los errors cambien, espero 5s y limpio el []
+  useEffect(() => {
+    if (errors.length) {
+      const timer = setTimeout(() => { setErrors([]) }, 5000);
+      return () => clearTimeout(timer); // si el usuario cambia de pantalla se elimina el timer
+    }
+  }, [errors]); // [errors] significia que cada vez que esa prop cambie, se ejecuta el useEffect
+
+  // para que cada vez que se cambie de url (se recarga la App) siga el isAuthenticated=true
+  // checkeamos si existe el token en las cookies
+  useEffect(() => {
+    const checkLogin = async () => { // hago esto para poder poner el async
+      const cookies = Cookies.get(); // traemos todas las cookies
+      console.log('cookies.get ', cookies);
+
+      if (!cookies.token) {
+        setIsAuthenticated(false);
+        setLoading(false);
+        return;
+      }
+      console.log('AuthContext - AuthProvider - token found - cookies.token: ', cookies.token);
+      try {
+        const res = await verifyTokenRequest(cookies.token);
+        console.log('AuthContext - AuthProvider - verifyTokenRequest - res(token): ', res);
+        if (!res.data) {
+          setIsAuthenticated(false);
+          setLoading(false);
+          return;
+        }
+
+        setIsAuthenticated(true);
+        setUser(res.data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setIsAuthenticated(false);
+        setLoading(false);
+      }
+    };
+    checkLogin();
+  }, [])
+
+
   // Función para registrar un usuario
   const signup = async (user) => {
     try {
@@ -59,47 +102,6 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     setUser(null);
   }
-
-  // Cada vez que los errors cambien, espero 5s y limpio el []
-  useEffect(() => {
-    if (errors.length) {
-      const timer = setTimeout(() => { setErrors([]) }, 5000);
-      return () => clearTimeout(timer); // si el usuario cambia de pantalla se elimina el timer
-    }
-  }, [errors]); // [errors] significia que cada vez que esa prop cambie, se ejecuta el useEffect
-
-  // para que cada vez que se cambie de url (se recarga la App) siga el isAuthenticated=true
-  // checkeamos si existe el token en las cookies
-  useEffect(() => {
-    const checkLogin = async () => { // hago esto para poder poner el async
-      const cookies = Cookies.get(); // traemos todas las cookies
-      console.log('cookies.get ', cookies);
-
-      if (!cookies.token) {
-        setIsAuthenticated(false);
-        setLoading(false);
-        return;
-      }
-      console.log('token found');
-      try {
-        const res = await verifyTokenRequest(cookies.token);
-        if (!res.data) {
-          setIsAuthenticated(false);
-          setLoading(false);
-          return;
-        }
-
-        setIsAuthenticated(true);
-        setUser(res.data);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setIsAuthenticated(false);
-        setLoading(false);
-      }
-    };
-    checkLogin();
-  }, [])
 
 
   return (

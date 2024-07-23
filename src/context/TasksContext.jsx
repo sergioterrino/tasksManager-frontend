@@ -62,12 +62,6 @@ export function TaskProvider({ children }) {
   }
 
   const updateTask = async (id, task) => {
-    // try {
-    //   const res = await updateTaskRequest(id, task);
-    //   return res.data;
-    // } catch (error) {
-    //   console.log(error);
-    // }
     try {
       const res = await updateTaskRequest(id, task);
       if (res.status === 200) {
