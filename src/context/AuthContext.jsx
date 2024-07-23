@@ -34,17 +34,17 @@ export const AuthProvider = ({ children }) => {
   // checkeamos si existe el token en las cookies
   useEffect(() => {
     const checkLogin = async () => { // hago esto para poder poner el async
-      const cookies = Cookies.get(); // traemos todas las cookies
-      console.log('cookies.get ', cookies);
+      const token = Cookies.get("token"); // traemos todas las cookies
+      console.log('cookies.get.token ', token);
 
-      if (!cookies.token) {
+      if (!token) {
         setIsAuthenticated(false);
         setLoading(false);
         return;
       }
-      console.log('AuthContext - AuthProvider - token found - cookies.token: ', cookies.token);
+      console.log('AuthContext - AuthProvider - token found - cookies.token: ', token);
       try {
-        const res = await verifyTokenRequest(cookies.token);
+        const res = await verifyTokenRequest();
         console.log('AuthContext - AuthProvider - verifyTokenRequest - res(token): ', res);
         if (!res.data) {
           setIsAuthenticated(false);
